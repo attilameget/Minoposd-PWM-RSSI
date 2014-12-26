@@ -1,0 +1,1 @@
+Use original ArduCAM OSD Libraries at compile-time.
