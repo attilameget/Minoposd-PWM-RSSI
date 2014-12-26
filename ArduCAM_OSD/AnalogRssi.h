@@ -40,10 +40,10 @@
 void analog_rssi_init(void);
 void analog_rssi_read(void);
 
-#define PWM_RSSI_PIN                   9 // D10 is pin 14
-#define PWM_RSSI_MIN                   978 // min pulse with of RSSI EZUHF
-#define PWM_RSSI_MAX                   1600 // min pulse with of RSSI EZUHF 
-void pwm_rssi_init(void);
-void pwm_rssi_read(void);
+// set these for PWM RSSI
+#define PWM_RSSI_PIN                   9                       // D9 is pin 13
+#define PWM_RSSI_MIN                   978                     // min pulse width of RSSI EZUHF
+#define PWM_RSSI_MAX                   1600                    // min pulse width of RSSI EZUHF 
+
 
 #endif /* ANALOG_RSSI_H_ */

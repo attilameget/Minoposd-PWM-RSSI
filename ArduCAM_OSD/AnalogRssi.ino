@@ -34,7 +34,7 @@
 void analog_rssi_init(void)
 {
 #ifdef PWM_RSSI
-        pwm_rssi_init();
+        pinMode(PWM_RSSI_PIN, INPUT);                   // set input for PWM read
 #else
 	analogReference(INTERNAL);			// INTERNAL: a built-in reference, equal to 1.1 volts on the ATmega168 or ATmega328
 #endif // PWM_RSSI
@@ -43,39 +43,28 @@ void analog_rssi_init(void)
 
 void analog_rssi_read(void)
 {
-#ifdef PWM_RSSI
-          pwm_rssi_read();
-          osd_rssi = pwm_rssi;
-          osd_rssi = 13;
-#else
-                	if (rssiraw_on) {
-                		osd_rssi = analogRead(RSSI_PIN) / 4;				// Just raw value, 0-255. We use this range to better align
-                										// with the original code.
-                	} else {
-                #ifdef JR_SPECIALS
-                // SEARCH GLITCH
-                		osd_rssi = analogRead(RSSI_PIN)       / 4;			// 1:1 input
-                #else
-                		osd_rssi = analogRead(RSSI_PIN) * .2  / 4 + osd_rssi * .8;	// Smooth input
-                #endif
-                		osd_rssi = constrain(osd_rssi, rssipersent, rssical);		// Ensure we stay in range
-                	}
-#endif // PWM RSSI
-  osd_rssi = 13;
-}
+        if (rssiraw_on) {
+           #ifdef PWM_RSSI
+                osd_rssi = pulseIn(PWM_RSSI_PIN,HIGH);
+//                pwm_rssi = map(pwm_rssi, PWM_RSSI_MIN,PWM_RSSI_MAX,0,255);      // put range into 0-255 
+           #else
+        	osd_rssi = analogRead(RSSI_PIN) / 4;				// Just raw value, 0-255. We use this range to better align
+                      										// with the original code.
+           #endif // PWM_RSSI
+        } else {
+          #ifdef JR_SPECIALS
+          // SEARCH GLITCH
+          osd_rssi = analogRead(RSSI_PIN)       / 4;			// 1:1 input
+          #else
+          osd_rssi = analogRead(RSSI_PIN) * .2  / 4 + osd_rssi * .8;	// Smooth input
+          #endif
+        
+          osd_rssi = constrain(osd_rssi, rssipersent, rssical);		// Ensure we stay in range
+        
+        } // rssiraw_on
 
 
-void pwm_rssi_init (void) 
-{
-  pinMode(PWM_RSSI_PIN, INPUT);
-}
+} // void analog_rssi_read(void)
 
 
-void pwm_rssi_read(void) 
-{
-    pwm_rssi = pulseIn(PWM_RSSI_PIN,HIGH);
-    if (!rssiraw_on) {
-      pwm_rssi = map(pwm_rssi, PWM_RSSI_MIN,PWM_RSSI_MAX,0,100); 
-    }
-}
 
