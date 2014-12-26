@@ -37,7 +37,7 @@
 #define AH_BETTER_RESOLUTION
 
 // JRChange: show_radar
-#define SHOW_RADAR
+//#define SHOW_RADAR
 
 // JRChange: JR specials
 //#define JR_SPECIALS
@@ -49,7 +49,7 @@
 //#define GPS_SIMULATION
 
 // EZZUHF PWM_RSSI
-// #define PWM_RSSI
+ #define PWM_RSSI
 
 // Version
 //#define VERSION_RELEASE_12_10_1		// OpenPilot-RELEASE 12.10.1	Release from 2012.10.26
